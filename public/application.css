@@ -1,0 +1,20 @@
+form#hit_form {
+  float: left;
+  margin-right: 10px;
+}
+
+form#stay_form {
+  float: left;
+}
+
+img.card_image {
+  margin: 0px 5px 5px 0px;
+}
+
+.white_text {
+	color :white;
+}
+
+.well {
+	background-color: rgba(245, 245, 245, 0.4);
+}

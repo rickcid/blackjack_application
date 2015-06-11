@@ -1,8 +1,10 @@
 require 'rubygems'
 require 'sinatra'
 
+use Rack::Session::Cookie, :key => 'rack.session',
+                           :path => '/',
+                           :secret => 'abracadabra' 
 
-set :sessions, true
 
 BLACKJACK_AMOUNT = 21
 DEALER_MIN_HIT = 17
@@ -57,7 +59,7 @@ helpers do
     session[:player_pot] = session[:player_pot] + session[:player_bet]
     @winner = "<h4>#{session[:player_name]} you won!!</h4> #{msg}"
   end
-
+  #Differs than Tealeaf
   def condition21!(msg)
     @show_hit_or_stay_buttons = false
     @condition21 = "<h4>You got 21!! But don't go counting your money yet.</h4> #{msg}"
@@ -67,7 +69,7 @@ helpers do
     @play_again = true
     @show_hit_or_stay_buttons = false
     session[:player_pot] = session[:player_pot] - session[:player_bet]
-    @loser = "<h4>#{session[:player_name]} you lost!</h4> #{msg}"
+    @loser = "<h4>#{session[:player_name]} you lost!</h4> #{msg}"#different
   end
 
   def tie!(msg)
@@ -113,6 +115,9 @@ end
 post '/bet' do
   if params[:bet_amount].nil? || params[:bet_amount].to_i == 0
     @error = "Come on, enter a bet! Don't leave me hang'n!"
+    halt erb(:bet)
+  elsif params[:bet_amount].to_i < 0
+    @error = "Come on, you can't bet negative numbers!"
     halt erb(:bet)
   elsif params[:bet_amount].to_i > session[:player_pot]
     @error = "Come on playa? Your bet can't be greater than the ($#{session[:player_pot]}) you have."
